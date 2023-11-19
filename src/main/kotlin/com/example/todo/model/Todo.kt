@@ -8,6 +8,6 @@ data class Todo (
     var desc: String?,
     var dueDate: String,
     var completionDate: String?,
-    var folder: Int,
+    var folder: String,
     var priority: Priority
 )
