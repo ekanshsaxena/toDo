@@ -3,8 +3,8 @@ CREATE TABLE Todo (
   Name VARCHAR(255),
   Due_Date DATE,
   Completion_Date DATE,
-  Folder_Id INT,
-  Priority ENUM ('High', 'Med', 'Low'),
+  Folder_Id VARCHAR(60),
+  Priority VARCHAR(20),
   Description TEXT,
   FOREIGN KEY (Folder_Id) REFERENCES Folder(Id)
 );

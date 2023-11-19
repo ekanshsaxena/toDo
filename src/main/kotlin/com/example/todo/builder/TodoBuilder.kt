@@ -13,6 +13,11 @@ class TodoBuilder {
     private var folder: String = "Unknown"
     private var priority: Priority = Priority.HIGH
 
+    fun id(id: String): TodoBuilder{
+        this.id = id
+        return this
+    }
+
     fun name(name: String): TodoBuilder{
         this.name = name
         return this
