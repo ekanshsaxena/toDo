@@ -1,6 +1,6 @@
 package com.example.todo.service
 
-import com.example.todo.builder.TodoBuilder
+import com.example.todo.Util.TodoUtil
 import com.example.todo.model.Todo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +12,10 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Service
-class ToDoService(val db: JdbcTemplate) {
+class ToDoService(
+    val db: JdbcTemplate,
+    val todoUtil: TodoUtil
+) {
     private val logger: Logger = LoggerFactory.getLogger(ToDoService::class.java)
     fun createTodo(todo: Todo): Todo? {
         todo.id = UUID.randomUUID().toString()
@@ -27,38 +30,38 @@ class ToDoService(val db: JdbcTemplate) {
                 todo.priority.toString()
             )
         }catch (ex: Exception){
-            logger.error("Error Occurred: $ex")
+            logger.error("Error Occurred while creating Todo: $ex")
             return null
         }
         return todo
     }
 
     fun readTodo(id: String): Todo? {
-        val todo = TodoBuilder().id(id)
-        try {
-            return db.query("select * from Todo where id = ?", id) { rs, _ ->
-                todo
-                    .name(rs.getString("name"))
-                    .desc(rs.getString("desc"))
-                    .dueDate(rs.getDate("dueDate").toString())
-                    .completionDate(rs.getDate("completionDate")?.toString())
-                    .folder(rs.getString("folder"))
-                    .priority(rs.getString("priority"))
-                    .build()
-            }.firstOrNull()
+        return try {
+            var todo: Todo? = null
+            db.query("select * from Todo where id = ?", id) { rs, _ ->
+                todo = todoUtil.getTodo(rs)
+            }
+            if (todo == null){
+                logger.warn("Todo Not Found with the ID: $id")
+            }
+            return todo
         }catch (ex: Exception){
-            logger.error("Error Occurred: $ex")
-            return null
+            logger.error("Error Occurred while reading Todo: $ex")
+            null
         }
     }
 
     fun updateTodo(id: String, todo: Todo) : Todo?{
-        if(readTodo(id) == null) return null
+        if(readTodo(id) == null) {
+            logger.info("Todo not found with the ID: $id")
+            return null
+        }
         try {
             db.update("update Todo set name=?, desc=?, due_date=?, completion_date=?, folder=?, priority=? where id = ?", todo.name, todo.desc, LocalDate.parse(todo.dueDate, DateTimeFormatter.ISO_DATE),
                 LocalDate.parse(todo.completionDate, DateTimeFormatter.ISO_DATE), todo.folder, todo.priority.toString(), id)
         }catch (ex: Exception){
-            logger.error("Error Occurred: $ex")
+            logger.error("Error Occurred while updating Todo: $ex")
             return null
         }
         return todo
@@ -66,9 +69,9 @@ class ToDoService(val db: JdbcTemplate) {
 
     fun deleteTodo(id: String): Boolean {
         try {
-            db.query("delete from Todo where id = ?", id) {}
+            db.update("delete from Todo where id = ?", id)
         }catch (ex: Exception){
-            logger.error("Error Occurred: $ex")
+            logger.error("Error Occurred while deleting Todo: $ex")
             return false
         }
         return true

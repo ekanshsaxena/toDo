@@ -1,0 +1,17 @@
+### Create Folder
+POST http://localhost:8080/createFolder
+Content-Type: application/json
+
+"December"
+
+### Read Folder
+GET http://localhost:8080/readFolder/a1012ba8-5d21-4ea5-8cf2-1c7da3ef568b
+
+### Update Folder
+PUT http://localhost:8080/updateFolder/98a57ad8-e0a4-4a1c-ba64-c4a01be62b8c
+Content-Type: application/json
+
+"January"
+
+### Delete Folder
+DELETE http://localhost:8080/deleteFolder/98a57ad8-e0a4-4a1c-ba64-c4a01be62b8c

@@ -9,8 +9,18 @@ class FolderBuilder {
     private var name: String = "Enter a name"
     private var todos: List<Todo> = listOf()
 
+    fun id(id: String): FolderBuilder{
+        this.id = id
+        return this
+    }
+
     fun name(name: String): FolderBuilder{
         this.name = name
+        return this
+    }
+
+    fun todos(todos: List<Todo>): FolderBuilder{
+        this.todos = todos
         return this
     }
 

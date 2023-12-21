@@ -1,0 +1,32 @@
+### Create Todo
+POST http://localhost:8080/createTodo
+Content-Type: application/json
+
+{
+  "id": "RandomID",
+  "name": "Complete the Todo App",
+  "desc": "Complete Backend",
+  "dueDate": "2023-12-31",
+  "completionDate": "2023-12-22",
+  "folder": "a1012ba8-5d21-4ea5-8cf2-1c7da3ef568b",
+  "priority": "HIGH"
+}
+
+### Read Todo
+GET http://localhost:8080/readTodo/4ba16c7b-9b83-49d4-8bf8-833c1b277694
+
+### Update Todo
+PUT http://localhost:8080/updateTodo/4ba16c7b-9b83-49d4-8bf8-833c1b277694
+Content-Type: application/json
+
+{
+  "id": "RandomID",
+  "name": "Name of Todo",
+  "dueDate": "2023-11-28",
+  "completionDate": "2023-11-30",
+  "folder": "a1012ba8-5d21-4ea5-8cf2-1c7da3ef568b",
+  "priority": "HIGH"
+}
+
+### Delete Todo
+DELETE http://localhost:8080/deleteTodo/4ba16c7b-9b83-49d4-8bf8-833c1b277694

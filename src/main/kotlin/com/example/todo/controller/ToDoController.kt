@@ -30,7 +30,7 @@ class ToDoController(val toDoService: ToDoService) {
     }
 
     @DeleteMapping("/deleteTodo/{id}")
-    fun deleteTodo(@PathVariable id: String){
-        toDoService.deleteTodo(id)
+    fun deleteTodo(@PathVariable id: String): Boolean{
+        return toDoService.deleteTodo(id)
     }
 }
